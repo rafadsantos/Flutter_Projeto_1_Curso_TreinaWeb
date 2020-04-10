@@ -1,4 +1,4 @@
-//PROJETO 1 - CURSO TREINA WEB - VERSÃO 2
+//PROJETO 1 - CURSO TREINA WEB - VERSÃO 3
 //última atualização em 08/04/2020
 
 import 'package:flutter/material.dart';
@@ -15,14 +15,52 @@ class TreinaWebFlutterApp extends StatelessWidget {
       home: new PaginaPrincipalPage(),
     );
   }
-
 }
 
+// Classe da página principal
 //Boas práticas: criar uma classe para cada página da aplicação.
 //Nessa aplicação há apenas uma página principal.
-class PaginaPrincipalPage extends StatelessWidget {
-  double numero1 = 0.0;
-  double numero2 = 0.0;
+class PaginaPrincipalPage extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return new _PaginaPrincipalState();    
+  }
+  // Alternativa (com notação Lambda): 
+  // @override
+  // State<StatefulWidget> createState() => new _PaginaPrincipalState();
+}
+
+// Estado da página principal
+//"_" = private
+class _PaginaPrincipalState extends State<PaginaPrincipalPage> { // a classe _PaginaPrincipalState é visível apenas no main.dart devido ao "_"
+  double _numero1 = 0.0;
+  double _numero2 = 0.0;
+  double _resultadoAdicao = 0.0;
+  double _resultadoSubtracao = 0.0;
+
+  void _setNumero1(String valor) {
+    setState(() {
+      try {
+        _numero1 = double.parse(valor);
+        _resultadoAdicao = _numero1 + _numero2;
+        _resultadoSubtracao = _numero1 - _numero2;
+      } catch (ex) {
+        // TODO: notificar usuário
+      }
+    });
+  }
+
+  void _setNumero2(String valor) {
+    setState(() {
+      try {
+        _numero2 = double.parse(valor);
+        _resultadoAdicao = _numero1 + _numero2;
+        _resultadoSubtracao = _numero1 - _numero2;
+      } catch (ex) {
+        // TODO: notificar usuário
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +78,7 @@ class PaginaPrincipalPage extends StatelessWidget {
               ),
               keyboardType: TextInputType.number,
               onChanged: (valor) {
-                try {
-                  numero1 = double.parse(valor);
-                } catch (ex) {
-                  numero1 = 0.0;
-                }
+                _setNumero1(valor);
               },
             ),
 
@@ -54,29 +88,16 @@ class PaginaPrincipalPage extends StatelessWidget {
               ),
               keyboardType: TextInputType.number,
               onChanged: (valor) {
-                try {
-                  numero2 = double.parse(valor);
-                } catch (ex) {
-                  numero2 = 0.0;
-                }
+                _setNumero2(valor);
               },
             ),
 
-            new RaisedButton(
-              child: new Text('Calcular'),
-              onPressed: () {
-                double adicao = numero1 + numero2;
-                double subtracao = numero1 - numero2;
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) { //propriedade child não será mais utilizada futuramente (deprecated)
-                    return new AlertDialog(
-                      title: new Text("Resultados"),
-                      content: new Text(" - Adição: $adicao \n - Subtração: $subtracao")
-                    );
-                  }
-                );                
-              },
+            new Text(
+              "- Adição: $_resultadoAdicao \n - Subtração: $_resultadoSubtracao",
+              style: new TextStyle(
+                fontWeight: FontWeight.bold
+              ),
+              textAlign: TextAlign.center
             )
           ],
         ),
@@ -90,3 +111,4 @@ void main() {
 }
 //Outra maneira (com expressão "Lambda"):
 //void main() => runApp(new TreinaWebFlutterApp());
+
