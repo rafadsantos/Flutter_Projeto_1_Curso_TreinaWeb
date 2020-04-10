@@ -1,82 +1,92 @@
-//última alteração em 08/04/2020
+//PROJETO 1 - CURSO TREINA WEB - VERSÃO 2
+//última atualização em 08/04/2020
 
 import 'package:flutter/material.dart';
 
-class TreinaWebFlutter extends StatelessWidget { //não salva estados.
+//Classe da aplicação
+class TreinaWebFlutterApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return new MaterialApp(
+      title: "TreinaWeb Flutter",
+      theme: new ThemeData(
+        primarySwatch: Colors.cyan
+      ),
+      home: new PaginaPrincipalPage(),
+    );
+  }
+
+}
+
+//Boas práticas: criar uma classe para cada página da aplicação.
+//Nessa aplicação há apenas uma página principal.
+class PaginaPrincipalPage extends StatelessWidget {
   double numero1 = 0.0;
   double numero2 = 0.0;
 
-  @override // anotation, não é obrigatório, utilizado por questões de clareza.
-  Widget build(BuildContext context) { //método sobrescrito da classe StatelessWidget.
-    //Primeiro input
-    TextField primeiroNumeroField = new TextField(
-      decoration: InputDecoration(
-        labelText: 'Primeiro número'
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text('TreinaWeb - Flutter'),        
       ),
-      keyboardType: TextInputType.number,
-      onChanged: (valor) {
-        try {
-          numero1 = double.parse(valor);
-        } catch (ex) {
-          numero1 = 0.0;
-        }
-      },
-    );
+      body: new Container(
+        padding: EdgeInsets.all(16.0),
+        child: new Column(
+          children: <Widget>[
+            new TextField(
+              decoration: new InputDecoration(
+                labelText: "Primeiro número:"
+              ),
+              keyboardType: TextInputType.number,
+              onChanged: (valor) {
+                try {
+                  numero1 = double.parse(valor);
+                } catch (ex) {
+                  numero1 = 0.0;
+                }
+              },
+            ),
 
-    //Segundo input
-    TextField segundoNumeroField = new TextField(
-      decoration: InputDecoration(
-        labelText: 'Segundo número'
+            new TextField(
+              decoration: new InputDecoration(
+                labelText: "Segundo número:"
+              ),
+              keyboardType: TextInputType.number,
+              onChanged: (valor) {
+                try {
+                  numero2 = double.parse(valor);
+                } catch (ex) {
+                  numero2 = 0.0;
+                }
+              },
+            ),
+
+            new RaisedButton(
+              child: new Text('Calcular'),
+              onPressed: () {
+                double adicao = numero1 + numero2;
+                double subtracao = numero1 - numero2;
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) { //propriedade child não será mais utilizada futuramente (deprecated)
+                    return new AlertDialog(
+                      title: new Text("Resultados"),
+                      content: new Text(" - Adição: $adicao \n - Subtração: $subtracao")
+                    );
+                  }
+                );                
+              },
+            )
+          ],
+        ),
       ),
-      keyboardType: TextInputType.number,
-      onChanged: (valor) {
-        try {
-          numero2 = double.parse(valor);
-        } catch (ex) {
-          numero2 = 0.0;
-        }
-      },
     );
-
-    //Botão de cálculo
-    RaisedButton calcularButton = new RaisedButton(
-      child: new Text('Calcular'),
-      onPressed: () {
-        double adicao = numero1 + numero2;
-        double subtracao = numero1 - numero2;
-        AlertDialog resultadoDialog = new AlertDialog(
-          content: new Text("Resultados: adição = $adicao - Subtração = $subtracao")
-        );
-        showDialog(context: context, child: resultadoDialog);
-      },
-    );
-
-    //container para agrupar os widgets criados.
-    Container container = new Container(
-      padding: EdgeInsets.all(20.0), //margem
-      child: new Column(
-        children: <Widget>[primeiroNumeroField, segundoNumeroField, calcularButton],
-      ),
-    );
-
-    AppBar appBar = new AppBar(
-      title: new Text('TrienaWeb - Flutter (definido no title do AppBar'),
-    );
-
-    //"coordenador" de layouts.
-    Scaffold scaffold = new Scaffold(
-      appBar: appBar,
-      body: container,
-    );
-       
-    return scaffold;
   }
 }
 
 void main() {
-  runApp(new MaterialApp(
-    title: 'TreinaWeb Flutter (definido no title do runApp)',
-    home: new TreinaWebFlutter()
-  ));
+  runApp(new TreinaWebFlutterApp());
 }
-
+//Outra maneira (com expressão "Lambda"):
+//void main() => runApp(new TreinaWebFlutterApp());
